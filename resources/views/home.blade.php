@@ -13,8 +13,19 @@
                             {{ session('status') }}
                         </div>
                     @endif
+                    
+                    {{_('You are Logged in!')}}
+                    {{-- <h1> Login Sebagai:
+                        {{ Auth::user()->level }}
+                    </h1> --}}
 
-                    {{ __('You are logged in!') }}
+                    <h1>
+                        @if (Auth::check() && Auth::user()->level == 'admin')
+                        Login Sebagai Admin
+                        @else
+                        Login Sebagai Editor
+                        @endif
+                    </h1>
                 </div>
             </div>
         </div>

@@ -37,4 +37,31 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+    public function index() {
+        if ($user = Auth::user()) {
+            if($user->level == 'admin') {
+                return redirect()->intended('admin');
+            } elseif($user->level == 'editor') {
+                return redirect()->intended('editor');
+            }
+        }
+        return view('login');
+    }
+    public function proses_login(Request $request) {
+        $request->validate([
+            'username' => 'required',
+            'password' => 'required',
+        ]);
+        $kredensil = $request->only('username', 'password');
+
+        if(Auth::attemp($kredensil)) {
+            $user = Auth::user();
+            if($user->level == 'admin') {
+                return redirect()->intended('admin');
+            } elseif ($user->level == 'editor') {
+                return redirect()->intended('editor');
+            }
+            return redirect()->intended('/');
+        }
+    }
 }
